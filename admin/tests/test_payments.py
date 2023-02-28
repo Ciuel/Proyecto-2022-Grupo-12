@@ -18,7 +18,6 @@ def client(app):
 
 def test_member_paymets_api():
     response = requests.get("http://localhost:5000/api/me/payments/1")
-    print(response)
     assert response.status_code == 200
     data = response.json()["data"]
     assert len(data) == 5
@@ -28,17 +27,14 @@ def test_member_paymets_api():
 
 def test_post_payments_api(app):
     response = requests.get("http://localhost:5000/api/me/payments/1")
-    print(response)
     assert response.status_code == 200
     data = response.json()["data"]
     assert len(data["payments"]) == 1
     requests.post("http://localhost:5000/api/me/payments/1")
     response = requests.get("http://localhost:5000/api/me/payments/1")
-    print(response)
     assert response.status_code == 200
     data = response.json()["data"]
     assert len(data["payments"]) == 2
-    print(data["payments"][-1]["id"])
     with app.app_context():
         from src.core.board import delete_payment
         delete_payment(data["payments"][-1]["id"])
